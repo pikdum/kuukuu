@@ -35,11 +35,11 @@ defmodule KuukuuWeb.ThreadLive.Index do
 
   @impl true
   def handle_info({KuukuuWeb.ThreadLive.FormComponent, {:saved, thread}}, socket) do
-    {:noreply, stream_insert(socket, :threads, thread)}
+    {:noreply, stream_insert(socket, :threads, thread, at: 0)}
   end
 
   def handle_info({:thread_created, thread}, socket) do
-    {:noreply, stream_insert(socket, :threads, thread)}
+    {:noreply, stream_insert(socket, :threads, thread, at: 0)}
   end
 
   @impl true
