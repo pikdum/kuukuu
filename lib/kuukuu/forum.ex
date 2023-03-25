@@ -54,6 +54,7 @@ defmodule Kuukuu.Forum do
     %Thread{}
     |> Thread.changeset(attrs)
     |> Repo.insert()
+    |> broadcast(:thread_created)
   end
 
   @doc """
@@ -211,5 +212,16 @@ defmodule Kuukuu.Forum do
   """
   def change_post(%Post{} = post, attrs \\ %{}) do
     Post.changeset(post, attrs)
+  end
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(Kuukuu.PubSub, "forum")
+  end
+
+  defp broadcast({:error, _reason} = error, _event), do: error
+
+  defp broadcast({:ok, post}, event) do
+    Phoenix.PubSub.broadcast(Kuukuu.PubSub, "forum", {event, post})
+    {:ok, post}
   end
 end

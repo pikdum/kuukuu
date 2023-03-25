@@ -6,6 +6,7 @@ defmodule KuukuuWeb.ThreadLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket), do: Forum.subscribe()
     {:ok, stream(socket, :threads, Forum.list_threads())}
   end
 
@@ -34,6 +35,10 @@ defmodule KuukuuWeb.ThreadLive.Index do
 
   @impl true
   def handle_info({KuukuuWeb.ThreadLive.FormComponent, {:saved, thread}}, socket) do
+    {:noreply, stream_insert(socket, :threads, thread)}
+  end
+
+  def handle_info({:thread_created, thread}, socket) do
     {:noreply, stream_insert(socket, :threads, thread)}
   end
 
