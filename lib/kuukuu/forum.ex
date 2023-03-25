@@ -165,6 +165,7 @@ defmodule Kuukuu.Forum do
     %Post{}
     |> Post.changeset(attrs)
     |> Repo.insert()
+    |> broadcast(:post_created)
   end
 
   @doc """

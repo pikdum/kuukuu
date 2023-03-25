@@ -6,6 +6,7 @@ defmodule KuukuuWeb.ThreadLive.Show do
 
   @impl true
   def mount(%{"id" => id}, _session, socket) do
+    if connected?(socket), do: Forum.subscribe()
     {:ok, stream(socket, :posts, Forum.list_posts(id))}
   end
 
@@ -29,6 +30,14 @@ defmodule KuukuuWeb.ThreadLive.Show do
 
   def handle_info({KuukuuWeb.PostLive.FormComponent, {:saved, post}}, socket) do
     {:noreply, stream_insert(socket, :posts, post)}
+  end
+
+  def handle_info({:post_created, post}, socket) do
+    if post.parent_id == socket.assigns.thread.id do
+      {:noreply, stream_insert(socket, :posts, post)}
+    else
+      {:noreply, socket}
+    end
   end
 
   @impl true
