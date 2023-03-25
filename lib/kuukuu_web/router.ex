@@ -24,18 +24,28 @@ defmodule KuukuuWeb.Router do
 
     live "/threads", ThreadLive.Index, :index
     live "/threads/new", ThreadLive.Index, :new
-    live "/threads/:id/edit", ThreadLive.Index, :edit
 
     live "/threads/:id", ThreadLive.Show, :show
-    live "/threads/:id/show/edit", ThreadLive.Show, :edit
     live "/threads/:id/show/new", ThreadLive.Show, :new
+  end
 
-    live "/posts", PostLive.Index, :index
-    live "/posts/new", PostLive.Index, :new
-    live "/posts/:id/edit", PostLive.Index, :edit
+  scope "/", KuukuuWeb do
+    pipe_through [:browser, :require_admin_user]
 
-    live "/posts/:id", PostLive.Show, :show
-    live "/posts/:id/show/edit", PostLive.Show, :edit
+    live_session :require_admin_user,
+      on_mount: [{KuukuuWeb.UserAuth, :ensure_admin}] do
+      live "/threads/:id/edit", ThreadLive.Index, :edit
+
+      live "/threads/:id/show/edit", ThreadLive.Show, :edit
+      live "/threads/:id/show/new", ThreadLive.Show, :new
+
+      live "/posts", PostLive.Index, :index
+      live "/posts/new", PostLive.Index, :new
+      live "/posts/:id/edit", PostLive.Index, :edit
+
+      live "/posts/:id", PostLive.Show, :show
+      live "/posts/:id/show/edit", PostLive.Show, :edit
+    end
   end
 
   # Other scopes may use custom stacks.

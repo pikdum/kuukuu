@@ -17,6 +17,9 @@
         <li class="text-[0.8125rem] leading-6 text-zinc-900">
           <%= @current_user.email %>
         </li>
+        <li class="text-[0.8125rem] leading-6 text-zinc-900">
+          <%= @current_user.role %>
+        </li>
         <li>
           <.link
             href={~p"/users/settings"}
