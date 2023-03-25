@@ -19,9 +19,11 @@ defmodule KuukuuWeb.PostLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:subject]} type="text" label="Subject" />
         <.input field={@form[:author]} type="text" label="Author" />
-        <.input field={@form[:data]} type="text" label="Data" />
+        <.input field={@form[:data]} type="textarea" label="Data" />
+        <%= if assigns[:reply_to] do %>
+          <.input field={@form[:parent_id]} value={@reply_to} type="hidden" />
+        <% end %>
         <:actions>
           <.button phx-disable-with="Saving...">Save Post</.button>
         </:actions>

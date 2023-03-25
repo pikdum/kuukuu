@@ -14,7 +14,7 @@ defmodule Kuukuu.Forum.Post do
   @doc false
   def changeset(post, attrs) do
     post
-    |> cast(attrs, [:subject, :author, :data])
-    |> validate_required([:subject, :author, :data])
+    |> cast(attrs, [:author, :data, :parent_id, :subject])
+    |> validate_required([:author, :data])
   end
 end

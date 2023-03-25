@@ -18,7 +18,8 @@ defmodule Kuukuu.Forum do
 
   """
   def list_threads do
-    Repo.all(Thread)
+    from(t in Thread, where: is_nil(t.parent_id))
+    |> Repo.all()
   end
 
   @doc """
@@ -115,6 +116,20 @@ defmodule Kuukuu.Forum do
   """
   def list_posts do
     Repo.all(Post)
+  end
+
+  @doc """
+  Returns the list of posts for a thread.
+
+  ## Examples
+
+      iex> list_posts()
+      [%Post{}, ...]
+
+  """
+  def list_posts(thread_id) do
+    from(p in Post, where: p.parent_id == ^thread_id)
+    |> Repo.all()
   end
 
   @doc """

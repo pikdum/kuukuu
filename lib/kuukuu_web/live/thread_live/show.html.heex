@@ -5,6 +5,9 @@
     <.link patch={~p"/threads/#{@thread}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit thread</.button>
     </.link>
+    <.link patch={~p"/threads/#{@thread}/show/new"} phx-click={JS.push_focus()}>
+      <.button>New Reply</.button>
+    </.link>
   </:actions>
 </.header>
 
@@ -13,6 +16,29 @@
   <:item title="Author"><%= @thread.author %></:item>
   <:item title="Data"><%= @thread.data %></:item>
 </.list>
+
+<.table
+  id="posts"
+  rows={@streams.posts}
+  row_click={fn {_id, post} -> JS.navigate(~p"/posts/#{post}") end}
+>
+  <:col :let={{_id, post}} label="Author"><%= post.author %></:col>
+  <:col :let={{_id, post}} label="Data"><%= post.data %></:col>
+  <:action :let={{_id, post}}>
+    <div class="sr-only">
+      <.link navigate={~p"/posts/#{post}"}>Show</.link>
+    </div>
+    <.link patch={~p"/posts/#{post}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, post}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: post.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
 
 <.back navigate={~p"/threads"}>Back to threads</.back>
 
@@ -23,6 +49,18 @@
     title={@page_title}
     action={@live_action}
     thread={@thread}
+    patch={~p"/threads/#{@thread}"}
+  />
+</.modal>
+
+<.modal :if={@live_action == :new} id="thread-modal" show on_cancel={JS.patch(~p"/threads/#{@thread}")}>
+  <.live_component
+    module={KuukuuWeb.PostLive.FormComponent}
+    id={:new}
+    title={@page_title}
+    action={@live_action}
+    post={@post}
+    reply_to={@thread.id}
     patch={~p"/threads/#{@thread}"}
   />
 </.modal>

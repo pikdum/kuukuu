@@ -21,7 +21,7 @@ defmodule KuukuuWeb.ThreadLive.FormComponent do
       >
         <.input field={@form[:subject]} type="text" label="Subject" />
         <.input field={@form[:author]} type="text" label="Author" />
-        <.input field={@form[:data]} type="text" label="Data" />
+        <.input field={@form[:data]} type="textarea" label="Data" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Thread</.button>
         </:actions>

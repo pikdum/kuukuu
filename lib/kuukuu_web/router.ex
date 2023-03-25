@@ -25,6 +25,7 @@ defmodule KuukuuWeb.Router do
 
     live "/threads/:id", ThreadLive.Show, :show
     live "/threads/:id/show/edit", ThreadLive.Show, :edit
+    live "/threads/:id/show/new", ThreadLive.Show, :new
 
     live "/posts", PostLive.Index, :index
     live "/posts/new", PostLive.Index, :new
