@@ -1,7 +1,7 @@
 <.header>
   Listing Threads
   <:actions>
-    <.link patch={~p"/threads/new"}>
+    <.link patch={~p"/forum/new"}>
       <.button>New Thread</.button>
     </.link>
   </:actions>
@@ -10,16 +10,16 @@
 <.table
   id="threads"
   rows={@streams.threads}
-  row_click={fn {_id, thread} -> JS.navigate(~p"/threads/#{thread}") end}
+  row_click={fn {_id, thread} -> JS.navigate(~p"/forum/#{thread}") end}
 >
   <:col :let={{_id, thread}} label="Subject"><%= thread.subject %></:col>
   <:col :let={{_id, thread}} label="Author"><%= thread.author %></:col>
   <:col :let={{_id, thread}} label="Created"><%= thread.inserted_at %></:col>
   <:action :let={{_id, thread}}>
     <div class="sr-only">
-      <.link navigate={~p"/threads/#{thread}"}>Show</.link>
+      <.link navigate={~p"/forum/#{thread}"}>Show</.link>
     </div>
-    <.link patch={~p"/threads/#{thread}/edit"}>Edit</.link>
+    <.link patch={~p"/forum/#{thread}/edit"}>Edit</.link>
   </:action>
   <:action :let={{id, thread}}>
     <.link
@@ -31,13 +31,13 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="thread-modal" show on_cancel={JS.patch(~p"/threads")}>
+<.modal :if={@live_action in [:new, :edit]} id="thread-modal" show on_cancel={JS.patch(~p"/forum")}>
   <.live_component
     module={KuukuuWeb.ThreadLive.FormComponent}
     id={@thread.id || :new}
     title={@page_title}
     action={@live_action}
     thread={@thread}
-    patch={~p"/threads"}
+    patch={~p"/forum"}
   />
 </.modal>

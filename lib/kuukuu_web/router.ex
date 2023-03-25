@@ -22,11 +22,11 @@ defmodule KuukuuWeb.Router do
 
     get "/", PageController, :home
 
-    live "/threads", ThreadLive.Index, :index
-    live "/threads/new", ThreadLive.Index, :new
+    live "/forum", ThreadLive.Index, :index
+    live "/forum/new", ThreadLive.Index, :new
 
-    live "/threads/:id", ThreadLive.Show, :show
-    live "/threads/:id/show/new", ThreadLive.Show, :new
+    live "/forum/:id", ThreadLive.Show, :show
+    live "/forum/:id/show/new", ThreadLive.Show, :new
   end
 
   scope "/", KuukuuWeb do
@@ -34,10 +34,10 @@ defmodule KuukuuWeb.Router do
 
     live_session :require_admin_user,
       on_mount: [{KuukuuWeb.UserAuth, :ensure_admin}] do
-      live "/threads/:id/edit", ThreadLive.Index, :edit
+      live "/forum/:id/edit", ThreadLive.Index, :edit
 
-      live "/threads/:id/show/edit", ThreadLive.Show, :edit
-      live "/threads/:id/show/new", ThreadLive.Show, :new
+      live "/forum/:id/show/edit", ThreadLive.Show, :edit
+      live "/forum/:id/show/new", ThreadLive.Show, :new
 
       live "/posts", PostLive.Index, :index
       live "/posts/new", PostLive.Index, :new
