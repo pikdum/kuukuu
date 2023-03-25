@@ -7,6 +7,8 @@ defmodule Kuukuu.Forum.Thread do
     field :data, :string
     field :subject, :string
     field :parent_id, :id
+    field :reply_count, :integer, virtual: true
+    field :bumptime, :date, virtual: true
 
     timestamps()
   end

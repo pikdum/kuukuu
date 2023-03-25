@@ -7,6 +7,7 @@ defmodule Kuukuu.Forum do
   alias Kuukuu.Repo
 
   alias Kuukuu.Forum.Thread
+  alias Kuukuu.Forum.Post
 
   @doc """
   Returns the list of threads.
@@ -18,8 +19,20 @@ defmodule Kuukuu.Forum do
 
   """
   def list_threads do
-    from(t in Thread, where: is_nil(t.parent_id))
-    |> Repo.all()
+    query =
+      from(t in Thread,
+        left_join: p in Post,
+        on: t.id == p.parent_id,
+        group_by: t.id,
+        where: is_nil(t.parent_id),
+        select: %Thread{
+          t
+          | reply_count: count(p.id),
+            bumptime: coalesce(max(p.inserted_at), t.inserted_at)
+        }
+      )
+
+    from(subquery(query), order_by: [desc: :bumptime]) |> Repo.all()
   end
 
   @doc """
@@ -103,8 +116,6 @@ defmodule Kuukuu.Forum do
   def change_thread(%Thread{} = thread, attrs \\ %{}) do
     Thread.changeset(thread, attrs)
   end
-
-  alias Kuukuu.Forum.Post
 
   @doc """
   Returns the list of posts.
