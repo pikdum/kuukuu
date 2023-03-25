@@ -6,7 +6,7 @@ defmodule Kuukuu.Repo.Migrations.CreatePosts do
       add :subject, :string
       add :author, :string
       add :data, :string
-      add :parent_id, references(:posts, on_delete: :nothing)
+      add :parent_id, references(:posts, on_delete: :delete_all)
 
       timestamps()
     end
