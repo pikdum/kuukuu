@@ -18,6 +18,13 @@ defmodule KuukuuWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    live "/threads", ThreadLive.Index, :index
+    live "/threads/new", ThreadLive.Index, :new
+    live "/threads/:id/edit", ThreadLive.Index, :edit
+
+    live "/threads/:id", ThreadLive.Show, :show
+    live "/threads/:id/show/edit", ThreadLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

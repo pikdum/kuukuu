@@ -1,0 +1,28 @@
+<.header>
+  Thread <%= @thread.id %>
+  <:subtitle>This is a thread record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/threads/#{@thread}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit thread</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Subject"><%= @thread.subject %></:item>
+  <:item title="Author"><%= @thread.author %></:item>
+  <:item title="Data"><%= @thread.data %></:item>
+</.list>
+
+<.back navigate={~p"/threads"}>Back to threads</.back>
+
+<.modal :if={@live_action == :edit} id="thread-modal" show on_cancel={JS.patch(~p"/threads/#{@thread}")}>
+  <.live_component
+    module={KuukuuWeb.ThreadLive.FormComponent}
+    id={@thread.id}
+    title={@page_title}
+    action={@live_action}
+    thread={@thread}
+    patch={~p"/threads/#{@thread}"}
+  />
+</.modal>
